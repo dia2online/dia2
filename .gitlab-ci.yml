@@ -1,0 +1,37 @@
+include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
+
+.cache-paths: &cache-paths
+  paths:
+    - _ccache/
+
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+
+flatpak:
+    variables:
+        MANIFEST_PATH: "build-aux/flatpak/org.gnome.Dia.json"
+        FLATPAK_MODULE: "dia"
+        RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
+        APP_ID: "org.gnome.Dia"
+        BUNDLE: "dia-dev.flatpak"
+    extends: .flatpak
+
+nightly:
+  extends: '.publish_nightly'
+
+
+.mingw-defaults: &mingw-defaults
+    tags:
+        - win32-ps
+    script:
+        - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
+        - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/msys.sh"
+    cache:
+        key: "${env:CI_JOB_NAME}"
+        <<: *cache-paths
+
+msys2-mingw32:
+    variables:
+        MSYSTEM: "MINGW32"
+        CHERE_INVOKING: "yes"
+    <<: *mingw-defaults
