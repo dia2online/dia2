@@ -16,6 +16,20 @@ For reference, a number of other libraries are recommended for extra features.  
   - ftp://ftp.gnome.org/pub/GNOME/sources/libxslt/
 - **Python scripting is also possible** by installing Python 3 and PyGObject.
 
+### Ubuntu
+In Ubuntu, the following packages should be installed:
+```sh
+sudo apt-get install libgtk-3-dev gettext desktop-file-utils
+```
+(Optional) To turn on all optional dependencies, additional packages should be installed:
+```sh
+sudo apt-get install xsltproc libpoppler-cpp-dev libpoppler-private-dev libemf-dev libxslt1-dev appstream-util
+```
+(Optional) To build with doc and tests by `meson setup build -Ddoc=enabled -Dgtk_doc=true -Dtests=true`, these packages should be installed:
+```sh
+sudo apt-get install docbook-xsl libxml2-utils dblatex gtk-doc-tools
+```
+
 ### Windows
 
 Currently (as of 1f930b94) the Windows build is under heavy development and not all features are supported.  Help is always welcome!

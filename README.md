@@ -15,6 +15,8 @@ Dia is a GNU program, and is Free Software. See the COPYING file for the licence
 
 General documentation can be found in the [doc/](doc/) directory.
 
+## How to Build
+
 If you are thinking of contributing (either code or diagrams), please see
 [HACKING.md](HACKING.md).
 
