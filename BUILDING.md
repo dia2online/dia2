@@ -19,7 +19,8 @@ For reference, a number of other libraries are recommended for extra features.  
 ### Ubuntu
 In Ubuntu, the following packages should be installed:
 ```sh
-sudo apt-get install libgtk-3-dev gettext desktop-file-utils
+sudo apt install meson cmake gdb
+sudo apt-get install libgtk-3-dev gettext desktop-file-utils libgraphene-1.0-dev libpython3-dev
 ```
 (Optional) To turn on all optional dependencies, additional packages should be installed:
 ```sh
@@ -62,6 +63,10 @@ ninja install
 ## If missing dependencies, please check "Requirements" section
 ./install/bin/dia
 ```
+```sh
+meson setup build .  --buildtype debug
+meson compile -C build
+```
 
 ### 2. Using `meson devenv`
 ```
@@ -85,4 +90,13 @@ The most common issue currently on MSYS2 is that paths are incorrect.  There are
 
 ## Installing
 
-Simply do `ninja install`.
+Simply do `ninja install`. or
+```sh
+meson install -C build
+```
+
+## Run
+```sh
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/install/lib/x86_64-linux-gnu
+./install/bin/dia
+```
