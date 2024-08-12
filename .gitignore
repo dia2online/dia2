@@ -1,5 +1,6 @@
 # We only need to ignore meson build directories
 build/
+install/
 build-release/
 .vscode
 *.pyc
