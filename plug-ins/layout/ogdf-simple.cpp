@@ -22,7 +22,7 @@
 #include <ogdf/upward/DominanceLayout.h>
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
 #include <ogdf/upward/VisibilityLayout.h>
-#include <ogdf/energybased/SpringEmbedderFR.h>
+#include <ogdf/energybased/SpringEmbedderFRExact.h>
 #include <ogdf/energybased/SpringEmbedderKK.h>
 #include <ogdf/tree/TreeLayout.h>
 #include <ogdf/tree/RadialTreeLayout.h>
@@ -34,11 +34,6 @@
 // new with v2012.06
 #include <ogdf/planarlayout/FPPLayout.h>
 #include <ogdf/planarlayout/SchnyderLayout.h>
-
-#include <ogdf/energybased/multilevelmixer/MMMExampleFastLayout.h>
-#include <ogdf/energybased/multilevelmixer/MMMExampleNiceLayout.h>
-#include <ogdf/energybased/multilevelmixer/MMMExampleNoTwistLayout.h>
-#include <ogdf/energybased/multilevelmixer/MixedForceLayout.h>
 
 #include <ogdf/orthogonal/OrthoLayout.h>
 
@@ -214,16 +209,8 @@ KGraph::RealLayout (const char *module)
         pLayout->minDistCC (std::max(m_avgEdgeLen, sqrt(m_avgNodeSize)*distFactor));
         m_pLayout = pLayout;new ogdf::GEMLayout ();
     }
-    else if (strcmp ("MixedForce", module) == 0)
-        m_pLayout = new ogdf::MixedForceLayout ();
     else if (strcmp ("MixedModel", module) == 0)
         m_pLayout = new ogdf::MixedModelLayout();
-    else if (strcmp ("Nice", module) == 0)
-        m_pLayout = new ogdf::MMMExampleNiceLayout ();
-    else if (strcmp ("Fast", module) == 0)
-	m_pLayout = new ogdf::MMMExampleFastLayout();
-    else if (strcmp ("NoTwist", module) == 0)
-	m_pLayout = new ogdf::MMMExampleNoTwistLayout();
     else if (strcmp ("Planarization", module) == 0)
         m_pLayout = new ogdf::PlanarizationLayout ();
     else if (strcmp ("PlanarDraw", module) == 0)
@@ -236,9 +223,9 @@ KGraph::RealLayout (const char *module)
         m_pLayout = new ogdf::RadialTreeLayout ();
     else if (strcmp ("Schnyder", module) == 0)
         m_pLayout = new ogdf::SchnyderLayout ();
-    else if (strcmp ("SpringEmbedderFR", module) == 0)
+    else if (strcmp ("SpringEmbedderFRExact", module) == 0)
     {
-        ogdf::SpringEmbedderFR *pLayout = new ogdf::SpringEmbedderFR ();
+        ogdf::SpringEmbedderFRExact *pLayout = new ogdf::SpringEmbedderFRExact ();
         pLayout->minDistCC (std::max(m_avgEdgeLen, sqrt(m_avgNodeSize)*distFactor));
         m_pLayout = pLayout;
     }
@@ -300,21 +287,6 @@ KGraph::Layout (const char *module)
     catch (ogdf::InsufficientMemoryException &e)
     {
 	return OUT_OF_MEMORY;
-    }
-    catch (ogdf::PreconditionViolatedException &e)
-    {
-        fprintf (stderr, "odgf:Precontion %d failed", e.exceptionCode());
-	switch (e.exceptionCode())
-	{
-	case ogdf::pvcTree : return NO_TREE;
-	case ogdf::pvcForest : return NO_FOREST;
-	case ogdf::pvcConnected :
-	case ogdf::pvcOrthogonal :
-	case ogdf::pvcClusterPlanar :
-	case ogdf::pvcSelfLoop :
-	case ogdf::pvcPlanar :
-	default : return  FAILED_PRECONDITION;
-	}
     }
     catch (ogdf::AlgorithmFailureException &e)
     {

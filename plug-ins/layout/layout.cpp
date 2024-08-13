@@ -367,7 +367,7 @@ layout_callback1 (DiagramData *data,
   return layout_callback (data, filename, flags, user_data, dia_graph_create);
 }
 
-/* Use in macro like `AN_ENTRY(Test, NotAvailable, 2)` when HAVE_OGDF is defined */
+/* Used in macro like `AN_ENTRY(Test, NotAvailable, 2)` when `HAVE_OGDF` is defined */
 static DiaObjectChange *
 layout_callback2 (DiagramData *data,
                   const gchar *filename,

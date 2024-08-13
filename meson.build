@@ -53,7 +53,7 @@ conf.set('HAVE_POPPLER', libpoppler_dep.found() and libpopplercpp_dep.found())
 libemf_dep = cc.find_library('EMF', required: false)
 conf.set('HAVE_LIBEMF', libemf_dep.found())
 
-libogdf_dep = dependency('ogdf', required: false) # try to use pkg-config first, then cmake to find ogdf
+libogdf_dep = dependency('ogdf', required: false) # try to use pkg-config / cmake to find ogdf
 if not libogdf_dep.found()
   libogdf_dep = cc.find_library('ogdf', required: false)
 endif

@@ -30,6 +30,13 @@ sudo apt-get install xsltproc libpoppler-cpp-dev libpoppler-private-dev libemf-d
 ```sh
 sudo apt-get install docbook-xsl libxml2-utils dblatex gtk-doc-tools
 ```
+(Optional) Build and install `ogdf` (as a shared lib) from source
+```sh
+git clone --branch elderberry-202309 https://github.com/ogdf/ogdf.git
+...
+cmake .. -DBUILD_SHARED_LIBS=ON
+...
+```
 
 ### Windows
 
