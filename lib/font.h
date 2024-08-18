@@ -95,6 +95,7 @@ DiaFont                    *dia_font_new                    (const char       *f
 DiaFont                    *dia_font_new_from_style         (DiaFontStyle      style,
                                                              double            height);
 DiaFont                    *dia_font_new_from_legacy_name   (const char       *name);
+DiaFont                    *dia_font_new_from_description   (const char       *description);
 const char                 *dia_font_get_legacy_name        (DiaFont          *font);
 DiaFont                    *dia_font_copy                   (DiaFont          *font);
 DiaFontStyle                dia_font_get_style              (DiaFont          *font);
@@ -103,6 +104,8 @@ const PangoFontDescription *dia_font_get_description        (DiaFont          *f
 double                      dia_font_get_height             (DiaFont          *font);
 void                        dia_font_set_height             (DiaFont          *font,
                                                              double            height);
+void                        dia_font_set_size               (DiaFont          *font,
+                                                             double            size);
 double                      dia_font_get_size               (DiaFont          *font);
 void                        dia_font_set_slant              (DiaFont          *font,
                                                              DiaFontSlant      slant);

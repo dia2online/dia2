@@ -125,6 +125,7 @@ multistringprop_get_widget(StringProperty *prop, PropDialog *dialog)
   GtkWidget *ret = gtk_text_view_new();
   GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ret));
   GtkWidget *frame = gtk_frame_new(NULL);
+  gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (ret), FALSE);
   gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_IN);
   gtk_container_add(GTK_CONTAINER(frame), ret);
   g_signal_connect(G_OBJECT(ret), "key-release-event",
@@ -159,22 +160,22 @@ multistringprop_set_from_widget(StringProperty *prop, GtkWidget *widget) {
 static GtkWidget *
 fileprop_get_widget (StringProperty *prop, PropDialog *dialog)
 {
-  GtkFileFilter *filter;
-  GtkWidget *ret = gtk_file_chooser_button_new (_ ("Choose a file..."),
+  GtkFileFilter *filter = gtk_file_filter_new ();
+  GtkWidget *ret = gtk_file_chooser_button_new (_("Choose a file..."),
                                                 GTK_FILE_CHOOSER_ACTION_OPEN);
 
-  filter = gtk_file_filter_new ();
   if (prop->common.descr->extra_data) {
     const char **exts = prop->common.descr->extra_data;
 
     for (int i = 0; exts[i] != NULL; i++) {
-      char *globbed;
+      char *globbed = g_strdup_printf ("*.%s", exts[i]);
 
-      globbed = g_strdup_printf ("*.%s", exts[i]);
       gtk_file_filter_add_pattern (filter, globbed);
 
       g_free (globbed);
     }
+  } else {
+    gtk_file_filter_add_pixbuf_formats (filter);
   }
 
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (ret), filter);

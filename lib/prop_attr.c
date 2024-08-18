@@ -33,7 +33,6 @@
 #include "propinternals.h"
 #include "dia-arrow-selector.h"
 #include "dia-colour-selector.h"
-#include "dia-font-selector.h"
 #include "dia-line-style-selector.h"
 
 /***************************/
@@ -421,22 +420,27 @@ fontprop_copy(FontProperty *src)
 static WIDGET *
 fontprop_get_widget(FontProperty *prop, PropDialog *dialog)
 {
-  GtkWidget *ret = dia_font_selector_new();
-  prophandler_connect(&prop->common, G_OBJECT(ret), "value-changed");
+  GtkWidget *ret = gtk_font_button_new();
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (ret), GTK_FONT_CHOOSER_LEVEL_FAMILY | GTK_FONT_CHOOSER_LEVEL_STYLE);
+  prophandler_connect(&prop->common, G_OBJECT(ret), "font-set");
   return ret;
 }
 
 static void
 fontprop_reset_widget(FontProperty *prop, WIDGET *widget)
 {
-  dia_font_selector_set_font (DIA_FONT_SELECTOR (widget),
-                              prop->font_data);
+  const PangoFontDescription *desc = dia_font_get_description (prop->font_data);
+  gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (widget), desc);
 }
 
 static void
 fontprop_set_from_widget(FontProperty *prop, WIDGET *widget)
 {
-  prop->font_data = dia_font_selector_get_font (DIA_FONT_SELECTOR (widget));
+  char *desc = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (widget));
+  DiaFont *new_font = dia_font_new_from_description (desc);
+
+  g_clear_pointer (&desc, g_free);
+  g_set_object (&prop->font_data, new_font);
 }
 
 static void

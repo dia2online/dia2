@@ -40,6 +40,7 @@
 #include <math.h>
 #include <string.h>
 
+#include "font.h"
 #include "object.h"
 #include "class.h"
 #include "diaoptionmenu.h"
@@ -195,6 +196,28 @@ _class_set_comment (GtkTextView *view, gchar *text)
   gtk_text_buffer_set_text (buffer, text, -1);
 }
 
+static DiaFont *
+_font_from_button (GtkFontButton *btn)
+{
+  char *font_desc;
+  DiaFont *ret;
+
+  font_desc = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (btn));
+  ret = dia_font_new_from_description (font_desc);
+  g_clear_pointer (&font_desc, g_free);
+
+  return ret;
+}
+
+
+static void
+_set_selector_font (GtkFontButton *btn, DiaFont *font)
+{
+  gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (btn),
+                                  dia_font_get_description (font));
+}
+
+
 
 static void
 class_read_from_dialog(UMLClass *umlclass, UMLClassDialog *prop_dialog)
@@ -243,12 +266,12 @@ class_read_from_dialog(UMLClass *umlclass, UMLClassDialog *prop_dialog)
   dia_colour_selector_get_colour (DIA_COLOUR_SELECTOR (prop_dialog->fill_color),
                                   &umlclass->fill_color);
 
-  umlclass->normal_font = dia_font_selector_get_font (prop_dialog->normal_font);
-  umlclass->polymorphic_font = dia_font_selector_get_font (prop_dialog->polymorphic_font);
-  umlclass->abstract_font = dia_font_selector_get_font (prop_dialog->abstract_font);
-  umlclass->classname_font = dia_font_selector_get_font (prop_dialog->classname_font);
-  umlclass->abstract_classname_font = dia_font_selector_get_font (prop_dialog->abstract_classname_font);
-  umlclass->comment_font = dia_font_selector_get_font (prop_dialog->comment_font);
+  umlclass->normal_font = _font_from_button(prop_dialog->normal_font);
+  umlclass->polymorphic_font = _font_from_button(prop_dialog->polymorphic_font);
+  umlclass->abstract_font = _font_from_button(prop_dialog->abstract_font);
+  umlclass->classname_font = _font_from_button (prop_dialog->classname_font);
+  umlclass->abstract_classname_font = _font_from_button (prop_dialog->abstract_classname_font);
+  umlclass->comment_font = _font_from_button (prop_dialog->comment_font);
 
   umlclass->font_height = gtk_spin_button_get_value (prop_dialog->normal_font_height);
   umlclass->abstract_font_height = gtk_spin_button_get_value (prop_dialog->abstract_font_height);
@@ -291,12 +314,14 @@ class_fill_in_dialog(UMLClass *umlclass)
   dia_colour_selector_set_colour (prop_dialog->text_color, &umlclass->text_color);
   dia_colour_selector_set_colour (prop_dialog->line_color, &umlclass->line_color);
   dia_colour_selector_set_colour (prop_dialog->fill_color, &umlclass->fill_color);
-  dia_font_selector_set_font (prop_dialog->normal_font, umlclass->normal_font);
-  dia_font_selector_set_font (prop_dialog->polymorphic_font, umlclass->polymorphic_font);
-  dia_font_selector_set_font (prop_dialog->abstract_font, umlclass->abstract_font);
-  dia_font_selector_set_font (prop_dialog->classname_font, umlclass->classname_font);
-  dia_font_selector_set_font (prop_dialog->abstract_classname_font, umlclass->abstract_classname_font);
-  dia_font_selector_set_font (prop_dialog->comment_font, umlclass->comment_font);
+
+  _set_selector_font (prop_dialog->normal_font, umlclass->normal_font);
+  _set_selector_font (prop_dialog->polymorphic_font, umlclass->polymorphic_font);
+  _set_selector_font (prop_dialog->abstract_font, umlclass->abstract_font);
+  _set_selector_font (prop_dialog->classname_font, umlclass->classname_font);
+  _set_selector_font (prop_dialog->abstract_classname_font, umlclass->abstract_classname_font);
+  _set_selector_font (prop_dialog->comment_font, umlclass->comment_font);
+
   gtk_spin_button_set_value (prop_dialog->normal_font_height, umlclass->font_height);
   gtk_spin_button_set_value (prop_dialog->polymorphic_font_height, umlclass->polymorphic_font_height);
   gtk_spin_button_set_value (prop_dialog->abstract_font_height, umlclass->abstract_font_height);
@@ -311,7 +336,7 @@ create_font_props_row (GtkGrid    *grid,
                        gint        row,
                        DiaFont    *font,
                        real        height,
-                       DiaFontSelector **fontsel,
+                       GtkFontButton   **fontsel,
                        GtkSpinButton   **heightsel)
 {
   GtkWidget *label;
@@ -320,9 +345,10 @@ create_font_props_row (GtkGrid    *grid,
   label = gtk_label_new (kind);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_grid_attach (grid, label, 0, row, 1, 1);
-  *fontsel = DIA_FONT_SELECTOR (dia_font_selector_new ());
+  *fontsel = GTK_FONT_BUTTON (gtk_font_button_new ());
   gtk_widget_set_hexpand (GTK_WIDGET (*fontsel), TRUE);
-  dia_font_selector_set_font (DIA_FONT_SELECTOR (*fontsel), font);
+  gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (*fontsel), dia_font_get_description (font));
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (*fontsel), GTK_FONT_CHOOSER_LEVEL_FAMILY | GTK_FONT_CHOOSER_LEVEL_STYLE);
   gtk_grid_attach (GTK_GRID (grid), GTK_WIDGET(*fontsel), 1, row, 1, 1);
 
   adj = GTK_ADJUSTMENT (gtk_adjustment_new (height, 0.1, 10.0, 0.1, 1.0, 0));
@@ -361,6 +387,7 @@ class_create_page(GtkNotebook *notebook,  UMLClass *umlclass)
 
   label = gtk_label_new(_("Class name:"));
   entry = gtk_entry_new();
+  gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (entry), FALSE);
   prop_dialog->classname = GTK_ENTRY(entry);
   gtk_widget_grab_focus(entry);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

@@ -729,6 +729,7 @@ _attributes_create_page (GtkNotebook *notebook, UMLClass *umlclass)
   gtk_container_add (GTK_CONTAINER (scrolledwindow), entry);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (entry), GTK_WRAP_WORD);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (entry), TRUE);
+  gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (entry), FALSE);
   gtk_widget_show (entry);
 #if 0 /* while the GtkEntry has a "activate" signal, GtkTextView does not.
        * Maybe we should connect to "set-focus-child" instead?

@@ -241,19 +241,16 @@ EXPORTS
  dia_font_new
  dia_font_new_from_legacy_name
  dia_font_new_from_style
+ dia_font_new_from_description
  dia_font_set_any_family
  dia_font_set_height
+ dia_font_set_size
  dia_font_set_slant
  dia_font_set_slant_from_string
  dia_font_set_weight
  dia_font_set_weight_from_string
  dia_font_copy
  dia_font_string_width
-
- dia_font_selector_get_font
- dia_font_selector_get_type
- dia_font_selector_new
- dia_font_selector_set_font
 
  dia_guide_new
  dia_guide_copy

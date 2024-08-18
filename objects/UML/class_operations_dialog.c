@@ -982,7 +982,7 @@ operations_data_create_hbox (UMLClass *umlclass)
   gtk_container_add (GTK_CONTAINER (scrolledwindow), entry);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (entry), GTK_WRAP_WORD);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (entry),TRUE);
-
+  gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (entry), FALSE);
 
   gtk_grid_attach (GTK_GRID (grid), label, 4, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), scrolledwindow, 4, 1, 1, 2);
@@ -1340,6 +1340,7 @@ operations_parameters_data_create_vbox (UMLClass *umlclass)
   gtk_container_add (GTK_CONTAINER (scrolledwindow), entry);
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (entry), GTK_WRAP_WORD);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (entry),TRUE);
+  gtk_text_view_set_accepts_tab (GTK_TEXT_VIEW (entry), FALSE);
 
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_grid_attach (GTK_GRID (grid), label, 2, 1, 1, 1);

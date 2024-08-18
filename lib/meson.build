@@ -167,8 +167,6 @@ libdia_sources = stdprop_sources + [
     'dia-colour-cell-renderer.h',
     'dia-colour-selector.c',
     'dia-colour-selector.h',
-    'dia-font-selector.c',
-    'dia-font-selector.h',
     'dia-graphene.h',
     'dia-guide.c',
     'dia-guide.h',

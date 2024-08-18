@@ -1,7 +1,6 @@
 #pragma once
 
 #include "dia-colour-selector.h"
-#include "dia-font-selector.h"
 
 G_BEGIN_DECLS
 
@@ -32,12 +31,12 @@ struct _UMLClassDialog {
   GtkToggleButton *op_supp;
   GtkToggleButton *comments_vis;
   GtkToggleButton *op_wrap;
-  DiaFontSelector *normal_font;
-  DiaFontSelector *abstract_font;
-  DiaFontSelector *polymorphic_font;
-  DiaFontSelector *classname_font;
-  DiaFontSelector *abstract_classname_font;
-  DiaFontSelector *comment_font;
+  GtkFontButton *normal_font;
+  GtkFontButton *abstract_font;
+  GtkFontButton *polymorphic_font;
+  GtkFontButton *classname_font;
+  GtkFontButton *abstract_classname_font;
+  GtkFontButton *comment_font;
   GtkSpinButton *normal_font_height;
   GtkSpinButton *abstract_font_height;
   GtkSpinButton *polymorphic_font_height;
